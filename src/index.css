@@ -119,6 +119,11 @@
     100% { background-position: 200% 0; }
   }
 }
+button {
+  touch-action: manipulation;
+}* {
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* Traditional Patterns */
 .rangoli-dots {

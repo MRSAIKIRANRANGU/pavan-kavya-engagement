@@ -1042,8 +1042,12 @@ function App() {
     offset: ["start start", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100]); // Reduced for mobile
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 100]);
+const opacity = useTransform(
+  scrollYProgress,
+  [0, 0.5, 1],
+  isMobile ? [1, 1, 1] : [1, 0.5, 0]
+);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -1155,7 +1159,7 @@ function App() {
             </motion.video>
           )}
         </AnimatePresence>
-        <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px]" /> {/* Reduced blur for mobile */}
+        <div className={`absolute inset-0 ${isMobile ? 'bg-white/70' : 'bg-white/60 backdrop-blur-[1px]'}`} /> {/* Reduced blur for mobile */}
       </div>
 
       {/* Animated Traditional Patterns - Reduced on mobile */}
@@ -1203,31 +1207,33 @@ function App() {
         )}
 
         {/* Floating Petals - Reduced count on mobile */}
-        {[...Array(isMobile ? 5 : 15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-[#D4AF37]/20 text-lg md:text-2xl"
-            initial={{
-              x: Math.random() * (isMobile ? 300 : window.innerWidth),
-              y: Math.random() * (isMobile ? 500 : window.innerHeight),
-              rotate: 0
-            }}
-            animate={{
-              y: [null, -500],
-              x: [null, Math.sin(i) * (isMobile ? 50 : 200)],
-              rotate: [0, 360],
-              opacity: [0, 0.5, 0]
-            }}
-            transition={{
-              duration: isMobile ? 8 : 15,
-              repeat: Infinity,
-              delay: i * 1,
-              ease: "linear"
-            }}
-          >
-            <FaFlower />
-          </motion.div>
-        ))}
+        {!isMobile &&
+  [...Array(12)].map((_, i) => (
+    <motion.div
+      key={i}
+      className="absolute text-[#D4AF37]/20 text-lg md:text-2xl"
+      initial={{
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        rotate: 0
+      }}
+      animate={{
+        y: -600,
+        x: Math.sin(i) * 150,
+        rotate: 360,
+        opacity: [0, 0.6, 0]
+      }}
+      transition={{
+        duration: 18,
+        repeat: Infinity,
+        delay: i * 0.8,
+        ease: "linear"
+      }}
+    >
+      <FaFlower />
+    </motion.div>
+  ))
+}
       </div>
 
       {/* Elegant Navigation - Mobile Optimized */}
@@ -1297,34 +1303,34 @@ function App() {
 
         {/* Mobile Menu - Improved */}
         <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div 
-              className="md:hidden bg-white/95 backdrop-blur-md border-t border-[#D4AF37]/20"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <div className="px-4 py-3 space-y-2">
-                {[
-                  { id: 'home', label: 'Home', icon: '🏠' },
-                  { id: 'details', label: 'Celebration', icon: '🎉' },
-                  { id: 'venue', label: 'Venue', icon: '📍' },
-                  { id: 'contact', label: 'Connect', icon: '📞' }
-                ].map((item) => (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className="flex items-center gap-3 w-full text-left py-3 px-2 text-[#3E2723]/80 hover:text-[#D4AF37] hover:bg-[#D4AF37]/5 rounded-lg transition-all"
-                    whileHover={{ x: 5 }}
-                  >
-                    <span className="text-lg">{item.icon}</span>
-                    <span className="text-base font-medium">{item.label}</span>
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+  {isMenuOpen && (
+    <motion.div
+      className="md:hidden fixed top-16 left-0 w-full bg-white shadow-xl z-40"
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -20, opacity: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+    >
+      <div className="flex flex-col px-5 py-4 space-y-4">
+        {[
+          { id: 'home', label: 'Home', icon: '🏠' },
+          { id: 'details', label: 'Celebration', icon: '🎉' },
+          { id: 'venue', label: 'Venue', icon: '📍' },
+          { id: 'contact', label: 'Connect', icon: '📞' }
+        ].map((item) => (
+          <button
+            key={item.id}
+            onClick={() => scrollToSection(item.id)}
+            className="flex items-center gap-3 text-lg font-medium text-[#3E2723] active:scale-95 transition-transform"
+          >
+            <span className="text-xl">{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
       </motion.nav>
 
       {/* HERO SECTION - Mobile Optimized */}
@@ -1885,16 +1891,24 @@ function App() {
       </footer>
 
       {/* Floating Action Button - Mobile Optimized */}
-      <motion.button
-        onClick={() => scrollToSection('home')}
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-3 md:p-4 rounded-full shadow-xl hover:shadow-2xl transition-all"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={!isMobile ? { scale: 1.1 } : {}}
-        whileTap={{ scale: 0.9 }}
-      >
-        <FaStar className="text-base md:text-xl" />
-      </motion.button>
+      {isMobile ? (
+  <motion.button
+    onClick={handleDirections}
+    className="fixed bottom-5 right-5 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
+    initial={{ scale: 0 }}
+    animate={{ scale: 1 }}
+    whileTap={{ scale: 0.9 }}
+  >
+    <FaMapMarkerAlt className="text-xl" />
+  </motion.button>
+) : (
+  <motion.button
+    onClick={() => scrollToSection('home')}
+    className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
+  >
+    <FaStar className="text-xl" />
+  </motion.button>
+)}
     </div>
   );
 }
