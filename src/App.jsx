@@ -1925,7 +1925,6 @@
 
 
 
-
 // D:\saikiran_personal\engagement-invitation\src\App.jsx
 import { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -1947,7 +1946,8 @@ import {
   FaMoon,
   FaPepperHot as FaFlower,
   FaVolumeUp,
-  FaVolumeMute
+  FaVolumeMute,
+  FaLanguage
 } from "react-icons/fa";
 import { 
   GiLotus, 
@@ -1968,6 +1968,7 @@ function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
+  const [language, setLanguage] = useState('english'); // 'english' or 'telugu'
   const audioRef = useRef(null);
   
   const heroRef = useRef(null);
@@ -1977,19 +1978,18 @@ function App() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 100]);
-const opacity = useTransform(
-  scrollYProgress,
-  [0, 0.5, 1],
-  isMobile ? [1, 1, 1] : [1, 0.5, 0]
-);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    isMobile ? [1, 1, 1] : [1, 0.5, 0]
+  );
 
   // Initialize audio
   useEffect(() => {
     audioRef.current = new Audio('/audio/background-music.mp3');
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.2; // Low volume (20%)
+    audioRef.current.volume = 0.2;
     
-    // Try to play automatically
     const playAudio = async () => {
       try {
         await audioRef.current.play();
@@ -2030,6 +2030,10 @@ const opacity = useTransform(
     }
   };
 
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'english' ? 'telugu' : 'english');
+  };
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -2037,7 +2041,6 @@ const opacity = useTransform(
     checkMobile();
     window.addEventListener("resize", checkMobile);
     
-    // Preload video
     const video = document.createElement('video');
     video.src = window.innerWidth < 768 
       ? "/videos/website-background-mobile.mp4"
@@ -2049,7 +2052,7 @@ const opacity = useTransform(
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      if (!isMobile) { // Only apply mouse parallax on desktop
+      if (!isMobile) {
         setMousePosition({
           x: (e.clientX / window.innerWidth - 0.5) * 20,
           y: (e.clientY / window.innerHeight - 0.5) * 20
@@ -2062,7 +2065,165 @@ const opacity = useTransform(
 
   const mapsUrl = "https://www.google.com/maps/place/RAMBABU'S+HOME+%F0%9F%8F%A1/@18.0157821,79.8325191,1072m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3a336f006e9271eb:0x129e11348883dd7b!8m2!3d18.015777!4d79.835094!16s%2Fg%2F11zklttcdc?entry=ttu&g_ep=EgoyMDI2MDIxNy4wIKXMDSoASAFQAw%3D%3D";
   const phoneNumber = "918978553778";
-  const whatsappMessage = "🙏 Namaste! Sai Pavan & Kavya, please share the engagement live location. Excited to be part of your special day! 🌸";
+  
+  // Language-specific text
+  const text = {
+    english: {
+      brandName: 'SAI PAVAN ❤️ KAVYA',
+      brandNameMobile: 'S.P. ❤️ K.',
+      navHome: 'Home',
+      navCelebration: 'Celebration',
+      navVenue: 'Venue',
+      navConnect: 'Connect',
+      menuHome: 'Home',
+      menuCelebration: 'Celebration',
+      menuVenue: 'Venue',
+      menuConnect: 'Connect',
+      divineBlessings: 'With Divine Blessings of Our Parents & Elders',
+      divineBlessingsMobile: 'Divine Blessings',
+      saiPavan: 'Sai Pavan',
+      kavya: 'Kavya',
+      quote: '"As the sacred fire witnesses our union, as the holy chants fill the air, we seek your blessings to begin this beautiful journey of togetherness, bound by love, tradition, and eternal devotion."',
+      quoteMobile: 'As the sacred fire witnesses our union, we seek your blessings to begin this beautiful journey of togetherness.',
+      date: '25 Feb 2026',
+      time: '9:00 AM - 2:00 PM',
+      lunchFollows: 'Lunch follows ceremony',
+      celebrationTitle: 'The Auspicious Celebration',
+      celebrationSubtitle: 'Join us as we begin our sacred journey together, blessed by tradition and love',
+      celebrationSubtitleMobile: 'Join us as we begin our sacred journey together',
+      auspiciousDate: 'Auspicious Date',
+      dateValue: '25th February',
+      dateSub: 'Wednesday, 2026',
+      ceremonyTime: 'Ceremony Time',
+      timeValue: '9:00 AM - 2:00 PM',
+      timeSub: 'Muhurtham at 9:00 AM',
+      sacredRituals: 'Sacred Rituals',
+      ritualsValue: 'South Indian',
+      ritualsSub: 'Traditional Vedic Ceremony',
+      celebration: 'Celebration',
+      celebrationValue: 'Grand Lunch',
+      celebrationSub: 'Authentic Feast',
+      scheduleTitle: 'Sacred Ceremony Schedule',
+      muhurtham: 'Muhurtham',
+      muhurthamDesc: 'Auspicious beginning',
+      engagement: 'Engagement Ceremony',
+      engagementDesc: 'Exchange of rings',
+      blessings: 'Blessings from Elders',
+      blessingsDesc: 'Seeking blessings',
+      lunch: 'Grand Celebration Lunch',
+      lunchDesc: 'Traditional feast',
+      venueTitle: 'Venue',
+      venueSubtitle: 'Where love meets tradition',
+      venueName: 'RAMBABU\'S HOME',
+      venueLocation: 'Hyderabad, Telangana',
+      directions: 'Get Live Directions',
+      nearbyInfo: '🏨 Nearby Hotels Available • 🚗 Ample Parking • ♿ Wheelchair Accessible',
+      nearbyInfoMobile: '🏨 Hotels • 🚗 Parking • ♿ Accessible',
+      contactTitle: 'Connect With Us',
+      contactSubtitle: 'Your presence is our greatest gift. Please reach out with any questions',
+      contactSubtitleMobile: 'Your presence is our greatest gift',
+      callUs: 'Call Us',
+      callNumber: '+91 89785 53778',
+      callClick: 'Click to connect',
+      whatsapp: 'WhatsApp',
+      whatsappMessage: 'Send Message',
+      whatsappInfo: 'Get location & updates',
+      rsvp: 'Kindly RSVP by 25th February 2026',
+      blessingsTitle: 'Seeking Your Blessings',
+      blessingsText: '"May your blessings shower upon us as we begin this sacred journey of love, trust, and togetherness. Your presence will make our celebration complete."',
+      blessingsTextMobile: 'May your blessings shower upon us as we begin this sacred journey of love.',
+      footerNames: 'Sai Pavan Rangu & Kavya',
+      footerNamesMobile: 'Sai Pavan & Kavya',
+      footerDate: '25 Feb 2026 · 9:00 AM - 2:00 PM',
+      footerText: '"With hearts full of gratitude and souls filled with joy, we thank the Almighty and our beloved families for blessing us with this sacred union. Your presence and blessings will make our celebration truly complete."',
+      footerTextMobile: 'With hearts full of gratitude, we thank the Almighty and our families. Your presence will make our celebration complete.',
+      footerCopyright: '© 2026 · Crafted with love for Sai Pavan & Kavya',
+      audioPrompt: 'Tap to play music',
+      muteTitle: 'Mute music',
+      unmuteTitle: 'Unmute music',
+      languageToggle: 'తెలుగు',
+    },
+    telugu: {
+      brandName: 'సాయి పవన్ ❤️ కావ్య',
+      brandNameMobile: 'స.ప. ❤️ కా.',
+      navHome: 'హోమ్',
+      navCelebration: 'వేడుక',
+      navVenue: 'స్థలం',
+      navConnect: 'సంప్రదించండి',
+      menuHome: 'హోమ్',
+      menuCelebration: 'వేడుక',
+      menuVenue: 'స్థలం',
+      menuConnect: 'సంప్రదించండి',
+      divineBlessings: 'మా తల్లిదండ్రులు మరియు పెద్దల ఆశీస్సులతో',
+      divineBlessingsMobile: 'దివ్య ఆశీర్వాదాలు',
+      saiPavan: 'సాయి పవన్',
+      kavya: 'కావ్య',
+      quote: '"పవిత్ర అగ్ని సాక్షిగా, మంత్రోచ్ఛారణల మధ్య, ప్రేమ, సంప్రదాయం మరియు శాశ్వతమైన భక్తితో కూడిన ఈ అందమైన ప్రయాణాన్ని ప్రారంభించడానికి మీ ఆశీర్వాదాలు కోరుతున్నాము."',
+      quoteMobile: 'పవిత్ర అగ్ని సాక్షిగా, ఈ అందమైన ప్రయాణాన్ని ప్రారంభించడానికి మీ ఆశీర్వాదాలు కోరుతున్నాము.',
+      date: '25 ఫిబ్రవరి 2026',
+      time: 'ఉదయం 9:00 - మధ్యాహ్నం 2:00',
+      lunchFollows: 'కార్యక్రమం తర్వాత భోజనం',
+      celebrationTitle: 'శుభ వివాహ నిశ్చయం',
+      celebrationSubtitle: 'సంప్రదాయం మరియు ప్రేమతో ఆశీర్వదించబడిన ఈ పవిత్ర ప్రయాణంలో మాతో చేరండి',
+      celebrationSubtitleMobile: 'ఈ పవిత్ర ప్రయాణంలో మాతో చేరండి',
+      auspiciousDate: 'శుభ తేదీ',
+      dateValue: '25 ఫిబ్రవరి',
+      dateSub: 'బుధవారం, 2026',
+      ceremonyTime: 'కార్యక్రమ సమయం',
+      timeValue: 'ఉ. 9:00 - మ. 2:00',
+      timeSub: 'ముహూర్తం ఉ. 9:00 కి',
+      sacredRituals: 'పవిత్ర కార్యక్రమాలు',
+      ritualsValue: 'దక్షిణ భారత',
+      ritualsSub: 'సంప్రదాయ వైదిక కార్యక్రమం',
+      celebration: 'వేడుక',
+      celebrationValue: 'విందు భోజనం',
+      celebrationSub: 'ప్రామాణిక వంటకాలు',
+      scheduleTitle: 'పవిత్ర కార్యక్రమ షెడ్యూల్',
+      muhurtham: 'ముహూర్తం',
+      muhurthamDesc: 'శుభ ఆరంభం',
+      engagement: 'నిశ్చితార్థం',
+      engagementDesc: 'ఉంగరాల మార్పిడి',
+      blessings: 'పెద్దల ఆశీర్వాదం',
+      blessingsDesc: 'ఆశీస్సులు తీసుకోవడం',
+      lunch: 'విందు భోజనం',
+      lunchDesc: 'సంప్రదాయ విందు',
+      venueTitle: 'స్థలం',
+      venueSubtitle: 'ప్రేమ సంగమం',
+      venueName: 'రాంబాబు గారి నివాసం',
+      venueLocation: 'హైదరాబాద్, తెలంగాణ',
+      directions: 'దారి సూచనలు పొందండి',
+      nearbyInfo: '🏨 సమీప హోటళ్ళు • 🚗 పార్కింగ్ సౌకర్యం • ♿ వీల్ చైర్ సౌకర్యం',
+      nearbyInfoMobile: '🏨 హోటళ్ళు • 🚗 పార్కింగ్ • ♿ సౌకర్యం',
+      contactTitle: 'మమ్మల్ని సంప్రదించండి',
+      contactSubtitle: 'మీ సమక్షమే మాకు గొప్ప బహుమతి. ఏవైనా ప్రశ్నలకు సంప్రదించండి',
+      contactSubtitleMobile: 'మీ సమక్షమే మాకు గొప్ప బహుమతి',
+      callUs: 'కాల్ చేయండి',
+      callNumber: '+91 89785 53778',
+      callClick: 'కనెక్ట్ అవ్వడానికి క్లిక్ చేయండి',
+      whatsapp: 'వాట్సాప్',
+      whatsappMessage: 'సందేశం పంపండి',
+      whatsappInfo: 'లొకేషన్ & అప్డేట్స్ పొందండి',
+      rsvp: 'దయచేసి 25 ఫిబ్రవరి 2026 లోపు RSVP చేయండి',
+      blessingsTitle: 'మీ ఆశీర్వాదాలు కోరుతూ',
+      blessingsText: '"ప్రేమ, నమ్మకం మరియు కలయికతో కూడిన ఈ పవిత్ర ప్రయాణంలో మీ ఆశీర్వాదాలు మాపై కురిపించండి. మీ సమక్షంలోనే మా వేడుక పరిపూర్ణం అవుతుంది."',
+      blessingsTextMobile: 'ఈ పవిత్ర ప్రయాణంలో మీ ఆశీర్వాదాలు మాపై కురిపించండి.',
+      footerNames: 'సాయి పవన్ రంగు & కావ్య',
+      footerNamesMobile: 'సాయి పవన్ & కావ్య',
+      footerDate: '25 ఫిబ్రవరి 2026 · ఉ. 9:00 - మ. 2:00',
+      footerText: '"కృతజ్ఞతతో నిండిన హృదయాలతో, ఆనందంతో నిండిన ఆత్మలతో, ఈ పవిత్ర కలయికకు ఆశీర్వదించిన భగవంతుడికి మరియు మా కుటుంబ సభ్యులకు కృతజ్ఞతలు తెలియజేస్తున్నాము. మీ సమక్షం మరియు ఆశీర్వాదాలతోనే మా వేడుక పరిపూర్ణం అవుతుంది."',
+      footerTextMobile: 'కృతజ్ఞతతో నిండిన హృదయాలతో, భగవంతుడికి మరియు మా కుటుంబ సభ్యులకు కృతజ్ఞతలు. మీ సమక్షంతో మా వేడుక పరిపూర్ణం అవుతుంది.',
+      footerCopyright: '© 2026 · సాయి పవన్ & కావ్య ప్రేమతో రూపొందించబడింది',
+      audioPrompt: 'సంగీతం కోసం నొక్కండి',
+      muteTitle: 'సంగీతం మ్యూట్ చేయండి',
+      unmuteTitle: 'సంగీతం అన్మ్యూట్ చేయండి',
+      languageToggle: 'English',
+    }
+  };
+
+  const t = text[language];
+  const whatsappMessage = language === 'english' 
+    ? "🙏 Namaste! Sai Pavan & Kavya, please share the engagement live location. Excited to be part of your special day! 🌸"
+    : "🙏 నమస్తే! సాయి పవన్ & కావ్య, దయచేసి నిశ్చితార్థం లైవ్ లొకేషన్ షేర్ చేయండి. మీ ప్రత్యేక రోజులో భాగం కావడానికి సంతోషంగా ఉంది! 🌸";
 
   const handleCall = () => {
     window.location.href = `tel:+${phoneNumber}`;
@@ -2079,7 +2240,7 @@ const opacity = useTransform(
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = isMobile ? 60 : 80; // Adjust offset for mobile
+      const offset = isMobile ? 60 : 80;
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({
         top: elementPosition - offset,
@@ -2089,7 +2250,7 @@ const opacity = useTransform(
     setIsMenuOpen(false);
   };
 
-  // Animation Variants - Optimized for mobile
+  // Animation Variants
   const fadeInUp = {
     initial: { opacity: 0, y: isMobile ? 30 : 60 },
     animate: { opacity: 1, y: 0 },
@@ -2122,7 +2283,7 @@ const opacity = useTransform(
           {isVideoLoaded && (
             <motion.video
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.3 }} // Reduced opacity for mobile
+              animate={{ opacity: 0.3 }}
               transition={{ duration: 2 }}
               autoPlay
               muted
@@ -2140,12 +2301,11 @@ const opacity = useTransform(
             </motion.video>
           )}
         </AnimatePresence>
-        <div className={`absolute inset-0 ${isMobile ? 'bg-white/70' : 'bg-white/60 backdrop-blur-[1px]'}`} /> {/* Reduced blur for mobile */}
+        <div className={`absolute inset-0 ${isMobile ? 'bg-white/70' : 'bg-white/60 backdrop-blur-[1px]'}`} />
       </div>
 
-      {/* Animated Traditional Patterns - Reduced on mobile */}
+      {/* Animated Traditional Patterns */}
       <div className="fixed inset-0 -z-15 overflow-hidden pointer-events-none">
-        {/* Rangoli Pattern - Simplified for mobile */}
         <div className="absolute inset-0 opacity-5 md:opacity-10"
           style={{
             backgroundImage: `radial-gradient(circle at 30% 40%, #D4AF37 1px, transparent 1px),
@@ -2154,7 +2314,6 @@ const opacity = useTransform(
           }}
         />
         
-        {/* Mouse Parallax - Only on desktop */}
         {!isMobile && (
           <motion.div
             style={{
@@ -2187,37 +2346,36 @@ const opacity = useTransform(
           </motion.div>
         )}
 
-        {/* Floating Petals - Reduced count on mobile */}
         {!isMobile &&
-  [...Array(12)].map((_, i) => (
-    <motion.div
-      key={i}
-      className="absolute text-[#D4AF37]/20 text-lg md:text-2xl"
-      initial={{
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        rotate: 0
-      }}
-      animate={{
-        y: -600,
-        x: Math.sin(i) * 150,
-        rotate: 360,
-        opacity: [0, 0.6, 0]
-      }}
-      transition={{
-        duration: 18,
-        repeat: Infinity,
-        delay: i * 0.8,
-        ease: "linear"
-      }}
-    >
-      <FaFlower />
-    </motion.div>
-  ))
-}
+          [...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-[#D4AF37]/20 text-lg md:text-2xl"
+              initial={{
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                rotate: 0
+              }}
+              animate={{
+                y: -600,
+                x: Math.sin(i) * 150,
+                rotate: 360,
+                opacity: [0, 0.6, 0]
+              }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                delay: i * 0.8,
+                ease: "linear"
+              }}
+            >
+              <FaFlower />
+            </motion.div>
+          ))
+        }
       </div>
 
-      {/* Elegant Navigation - Mobile Optimized */}
+      {/* Elegant Navigation */}
       <motion.nav 
         className="fixed top-0 left-0 right-0 z-50 bg-white/90 md:bg-white/80 backdrop-blur-md shadow-sm"
         initial={{ y: -100 }}
@@ -2231,28 +2389,28 @@ const opacity = useTransform(
               whileHover={{ scale: 1.05 }}
             >
               <motion.div
-  animate={{ rotate: 360 }}
-  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-  className="flex items-center justify-center"
->
-  <img
-    src="/favicon.ico"
-    alt="Engagement Icon"
-    className="w-6 h-6 md:w-8 md:h-8 object-contain"
-    style={{ background: "transparent" }}
-  />
-</motion.div>
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="flex items-center justify-center"
+              >
+                <img
+                  src="/favicon.ico"
+                  alt="Engagement Icon"
+                  className="w-6 h-6 md:w-8 md:h-8 object-contain"
+                  style={{ background: "transparent" }}
+                />
+              </motion.div>
               <span className="font-heading text-sm md:text-base lg:text-xl text-[#3E2723] font-bold tracking-wide">
-                {isMobile ? 'S.P. ❤️ K.' : 'SAI PAVAN ❤️ KAVYA'}
+                {isMobile ? t.brandNameMobile : t.brandName}
               </span>
             </motion.div>
 
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
               {[
-                { id: 'home', label: 'Home' },
-                { id: 'details', label: 'Celebration' },
-                { id: 'venue', label: 'Venue' },
-                { id: 'contact', label: 'Connect' }
+                { id: 'home', label: t.navHome },
+                { id: 'details', label: t.navCelebration },
+                { id: 'venue', label: t.navVenue },
+                { id: 'contact', label: t.navConnect }
               ].map((item) => (
                 <motion.button
                   key={item.id}
@@ -2273,13 +2431,25 @@ const opacity = useTransform(
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Language Toggle Button */}
+              <motion.button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 px-2 py-1 md:px-3 md:py-1.5 bg-gradient-to-r from-[#D4AF37]/20 to-[#B76E79]/20 rounded-full text-xs md:text-sm font-medium text-[#3E2723] border border-[#D4AF37]/30"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title={language === 'english' ? 'Switch to Telugu' : 'Switch to English'}
+              >
+                <FaLanguage className="text-[#D4AF37] text-xs md:text-sm" />
+                <span>{t.languageToggle}</span>
+              </motion.button>
+
               {/* Audio Control Button */}
               <motion.button
                 onClick={toggleMute}
                 className="text-[#D4AF37] hover:text-[#B76E79] transition-colors p-2"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                title={isAudioMuted ? "Unmute music" : "Mute music"}
+                title={isAudioMuted ? t.unmuteTitle : t.muteTitle}
               >
                 {isAudioMuted ? <FaVolumeMute size={isMobile ? 16 : 20} /> : <FaVolumeUp size={isMobile ? 16 : 20} />}
               </motion.button>
@@ -2295,39 +2465,39 @@ const opacity = useTransform(
           </div>
         </div>
 
-        {/* Mobile Menu - Improved */}
+        {/* Mobile Menu */}
         <AnimatePresence>
-  {isMenuOpen && (
-    <motion.div
-      className="md:hidden fixed top-16 left-0 w-full bg-white shadow-xl z-40"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: -20, opacity: 0 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-    >
-      <div className="flex flex-col px-5 py-4 space-y-4">
-        {[
-          { id: 'home', label: 'Home', icon: '🏠' },
-          { id: 'details', label: 'Celebration', icon: '🎉' },
-          { id: 'venue', label: 'Venue', icon: '📍' },
-          { id: 'contact', label: 'Connect', icon: '📞' }
-        ].map((item) => (
-          <button
-            key={item.id}
-            onClick={() => scrollToSection(item.id)}
-            className="flex items-center gap-3 text-lg font-medium text-[#3E2723] active:scale-95 transition-transform"
-          >
-            <span className="text-xl">{item.icon}</span>
-            {item.label}
-          </button>
-        ))}
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              className="md:hidden fixed top-16 left-0 w-full bg-white shadow-xl z-40"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <div className="flex flex-col px-5 py-4 space-y-4">
+                {[
+                  { id: 'home', label: t.menuHome, icon: '🏠' },
+                  { id: 'details', label: t.menuCelebration, icon: '🎉' },
+                  { id: 'venue', label: t.menuVenue, icon: '📍' },
+                  { id: 'contact', label: t.menuConnect, icon: '📞' }
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className="flex items-center gap-3 text-lg font-medium text-[#3E2723] active:scale-95 transition-transform"
+                  >
+                    <span className="text-xl">{item.icon}</span>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
-      {/* Audio Play Prompt - Only shows if auto-play fails */}
+      {/* Audio Play Prompt */}
       <AnimatePresence>
         {!isAudioPlaying && !isAudioMuted && (
           <motion.div
@@ -2337,7 +2507,7 @@ const opacity = useTransform(
             className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md px-4 py-3 rounded-full shadow-xl border border-[#D4AF37]/30"
           >
             <div className="flex items-center gap-3">
-              <span className="text-[#3E2723] text-sm">Tap to play music</span>
+              <span className="text-[#3E2723] text-sm">{t.audioPrompt}</span>
               <motion.button
                 onClick={toggleAudio}
                 className="bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-2 rounded-full"
@@ -2351,13 +2521,12 @@ const opacity = useTransform(
         )}
       </AnimatePresence>
 
-      {/* HERO SECTION - Mobile Optimized */}
+      {/* HERO SECTION */}
       <section id="home" ref={heroRef} className="relative min-h-screen flex items-center justify-center px-3 md:px-4 pt-16 md:pt-20">
         <motion.div 
           style={{ y: isMobile ? 0 : y, opacity }}
           className="relative w-full max-w-6xl mx-auto"
         >
-          {/* Decorative Mandala - Simplified for mobile */}
           {!isMobile && (
             <motion.div 
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -2370,7 +2539,6 @@ const opacity = useTransform(
           )}
 
           <div className="text-center relative z-10">
-            {/* Sacred Text with Animation - Mobile Optimized */}
             <motion.div
               animate={!isMobile ? { y: [-10, 10, -10] } : {}}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -2383,13 +2551,12 @@ const opacity = useTransform(
               >
                 <span className="flex items-center gap-2 text-xs md:text-sm lg:text-base font-semibold tracking-wide">
                   <GiPrayerBeads className="text-sm md:text-xl" />
-                  {isMobile ? 'Divine Blessings' : 'With Divine Blessings of Our Parents & Elders'}
+                  {isMobile ? t.divineBlessingsMobile : t.divineBlessings}
                   <GiPrayerBeads className="text-sm md:text-xl" />
                 </span>
               </motion.div>
             </motion.div>
 
-            {/* Names with Staggered Animation - Mobile Optimized */}
             <motion.div
               initial="initial"
               animate="animate"
@@ -2405,7 +2572,7 @@ const opacity = useTransform(
                 variants={fadeInUp}
                 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-bold text-[#3E2723] mb-2 md:mb-4"
               >
-                Sai Pavan
+                {t.saiPavan}
                 <motion.span 
                   className="block text-lg md:text-2xl lg:text-3xl text-[#D4AF37] mt-2 md:mt-4 font-light tracking-[0.2em] md:tracking-[0.3em]"
                   animate={!isMobile ? { 
@@ -2417,7 +2584,7 @@ const opacity = useTransform(
                     ease: "easeInOut"
                   }}
                 >
-                  {isMobile ? 'RANGU' : 'RANGU'}
+                  {language === 'english' ? 'RANGU' : 'రంగు'}
                 </motion.span>
               </motion.h1>
 
@@ -2453,11 +2620,10 @@ const opacity = useTransform(
                 variants={fadeInUp}
                 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-bold text-[#3E2723] mt-2 md:mt-4"
               >
-                Kavya
+                {t.kavya}
               </motion.h2>
             </motion.div>
 
-            {/* Traditional Quote - Mobile Optimized */}
             <motion.div 
               variants={fadeInUp}
               initial="initial"
@@ -2467,14 +2633,11 @@ const opacity = useTransform(
             >
               <FaQuoteLeft className="absolute -left-2 md:-left-4 -top-2 md:-top-4 text-2xl md:text-4xl text-[#D4AF37]/30" />
               <p className="text-sm md:text-base lg:text-xl xl:text-2xl text-[#3E2723]/80 italic font-light px-6 md:px-12 leading-relaxed">
-                {isMobile 
-                  ? "As the sacred fire witnesses our union, we seek your blessings to begin this beautiful journey of togetherness."
-                  : '"As the sacred fire witnesses our union, as the holy chants fill the air, we seek your blessings to begin this beautiful journey of togetherness, bound by love, tradition, and eternal devotion."'}
+                {isMobile ? t.quoteMobile : t.quote}
               </p>
               <FaQuoteRight className="absolute -right-2 md:-right-4 -bottom-2 md:-bottom-4 text-2xl md:text-4xl text-[#D4AF37]/30" />
             </motion.div>
 
-            {/* Date and Time - Mobile Optimized */}
             <motion.div
               animate={!isMobile ? { scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] } : {}}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -2487,22 +2650,22 @@ const opacity = useTransform(
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6 text-base md:text-xl lg:text-2xl">
                   <div className="flex items-center gap-2">
                     <MdDateRange className="text-[#D4AF37] text-lg md:text-xl" />
-                    <span className="text-[#3E2723] font-semibold">25 Feb 2026</span>
+                    <span className="text-[#3E2723] font-semibold">{t.date}</span>
                   </div>
                   <div className="hidden sm:block w-px h-6 bg-[#D4AF37]/30" />
                   <div className="flex items-center gap-2">
                     <BsFillClockFill className="text-[#B76E79] text-lg md:text-xl" />
-                    <span className="text-[#3E2723] font-semibold">9:00 AM - 2:00 PM</span>
+                    <span className="text-[#3E2723] font-semibold">{t.time}</span>
                   </div>
                 </div>
-                <p className="text-[#B76E79] text-xs md:text-sm mt-2">Lunch follows ceremony</p>
+                <p className="text-[#B76E79] text-xs md:text-sm mt-2">{t.lunchFollows}</p>
               </motion.div>
             </motion.div>
           </div>
         </motion.div>
       </section>
 
-      {/* DETAILS SECTION - Mobile Optimized */}
+      {/* DETAILS SECTION */}
       <section id="details" className="py-16 md:py-32 px-3 md:px-4 relative">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -2514,13 +2677,11 @@ const opacity = useTransform(
             <motion.h2 
               className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-[#3E2723] mb-3 md:mb-4 px-2"
             >
-              The Auspicious Celebration
+              {t.celebrationTitle}
             </motion.h2>
             <div className="w-20 md:w-32 h-1 bg-gradient-to-r from-[#D4AF37] via-[#B76E79] to-[#D4AF37] mx-auto" />
             <p className="text-[#3E2723]/70 text-sm md:text-base lg:text-lg mt-4 md:mt-6 max-w-2xl mx-auto px-4">
-              {isMobile 
-                ? 'Join us as we begin our sacred journey together'
-                : 'Join us as we begin our sacred journey together, blessed by tradition and love'}
+              {isMobile ? t.celebrationSubtitleMobile : t.celebrationSubtitle}
             </p>
           </motion.div>
 
@@ -2528,30 +2689,30 @@ const opacity = useTransform(
             {[
               { 
                 icon: <FaCalendarAlt />, 
-                title: "Auspicious Date", 
-                value: "25th February",
-                sub: "Wednesday, 2026",
+                title: t.auspiciousDate, 
+                value: t.dateValue,
+                sub: t.dateSub,
                 gradient: "from-amber-400 to-orange-400"
               },
               { 
                 icon: <FaClock />, 
-                title: "Ceremony Time", 
-                value: "9:00 AM - 2:00 PM",
-                sub: "Muhurtham at 9:00 AM",
+                title: t.ceremonyTime, 
+                value: t.timeValue,
+                sub: t.timeSub,
                 gradient: "from-rose-400 to-pink-400"
               },
               { 
                 icon: <GiLotus />, 
-                title: "Sacred Rituals", 
-                value: "South Indian",
-                sub: "Traditional Vedic Ceremony",
+                title: t.sacredRituals, 
+                value: t.ritualsValue,
+                sub: t.ritualsSub,
                 gradient: "from-purple-400 to-indigo-400"
               },
               { 
                 icon: <FaGift />, 
-                title: "Celebration", 
-                value: "Grand Lunch",
-                sub: "Authentic Feast",
+                title: t.celebration, 
+                value: t.celebrationValue,
+                sub: t.celebrationSub,
                 gradient: "from-green-400 to-emerald-400"
               }
             ].map((item, index) => (
@@ -2581,20 +2742,19 @@ const opacity = useTransform(
             ))}
           </div>
 
-          {/* Traditional Schedule - Mobile Optimized */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-30px" }}
             className="mt-12 md:mt-20 bg-white/90 backdrop-blur-sm p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl border border-[#D4AF37]/20 mx-2 md:mx-0"
           >
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-heading text-[#3E2723] text-center mb-6 md:mb-10">Sacred Ceremony Schedule</h3>
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-heading text-[#3E2723] text-center mb-6 md:mb-10">{t.scheduleTitle}</h3>
             <div className="space-y-4 md:space-y-6 max-w-2xl mx-auto">
               {[
-                { time: "9:00 AM", event: "Muhurtham", icon: <FaStar />, desc: "Auspicious beginning" },
-                { time: "10:00 AM", event: "Engagement Ceremony", icon: <FaRing />, desc: "Exchange of rings" },
-                { time: "11:30 AM", event: "Blessings from Elders", icon: <FaPrayingHands />, desc: "Seeking blessings" },
-                { time: "1:00 PM", event: "Grand Celebration Lunch", icon: <FaGift />, desc: "Traditional feast" }
+                { time: "9:00 AM", event: t.muhurtham, icon: <FaStar />, desc: t.muhurthamDesc },
+                { time: "10:00 AM", event: t.engagement, icon: <FaRing />, desc: t.engagementDesc },
+                { time: "11:30 AM", event: t.blessings, icon: <FaPrayingHands />, desc: t.blessingsDesc },
+                { time: "1:00 PM", event: t.lunch, icon: <FaGift />, desc: t.lunchDesc }
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -2620,7 +2780,7 @@ const opacity = useTransform(
         </div>
       </section>
 
-      {/* VENUE SECTION - Mobile Optimized */}
+      {/* VENUE SECTION */}
       <section id="venue" className="py-16 md:py-32 px-3 md:px-4 relative bg-gradient-to-b from-[#FFF5E7] to-[#FFF0E0]">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -2630,10 +2790,10 @@ const opacity = useTransform(
             className="text-center mb-10 md:mb-16"
           >
             <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-[#3E2723] mb-3 md:mb-4">
-              Venue
+              {t.venueTitle}
             </h2>
             <div className="w-20 md:w-32 h-1 bg-gradient-to-r from-[#D4AF37] via-[#B76E79] to-[#D4AF37] mx-auto" />
-            <p className="text-[#3E2723]/70 text-sm md:text-base lg:text-lg mt-4 md:mt-6">Where love meets tradition</p>
+            <p className="text-[#3E2723]/70 text-sm md:text-base lg:text-lg mt-4 md:mt-6">{t.venueSubtitle}</p>
           </motion.div>
 
           <motion.div
@@ -2652,22 +2812,21 @@ const opacity = useTransform(
                   <GiIndianPalace />
                 </motion.div>
                 <h3 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-heading font-bold text-[#3E2723] text-center">
-                  RAMBABU'S HOME
+                  {t.venueName}
                 </h3>
                 <div className="flex items-center gap-1 md:gap-2 mt-1 md:mt-2 text-[#B76E79] text-sm md:text-base">
                   <MdLocationOn />
-                  <span>Hyderabad, Telangana</span>
+                  <span>{t.venueLocation}</span>
                 </div>
               </div>
 
-              {/* Elegant Map Preview - Mobile Optimized */}
               <div className="relative h-48 md:h-64 lg:h-80 mb-6 md:mb-8 rounded-xl md:rounded-2xl overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-[#B76E79]/20 flex items-center justify-center">
                   <div className="text-center px-4">
                     <GiTempleGate className="text-3xl md:text-4xl lg:text-6xl text-[#D4AF37] mx-auto mb-2 md:mb-4 opacity-50" />
                     <p className="text-[#3E2723]/60 text-xs md:text-sm flex items-center gap-1 md:gap-2">
                       <FaMapMarkerAlt className="text-[#D4AF37]" />
-                      Click below for live directions
+                      {language === 'english' ? 'Click below for live directions' : 'దిగువన క్లిక్ చేయండి'}
                     </p>
                   </div>
                 </div>
@@ -2681,16 +2840,13 @@ const opacity = useTransform(
                   className="bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white px-6 md:px-8 lg:px-10 py-3 md:py-4 rounded-full text-sm md:text-base lg:text-lg font-semibold flex items-center justify-center gap-2 md:gap-3 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-2xl transition-all w-full sm:w-auto"
                 >
                   <FaMapMarkerAlt />
-                  Get Live Directions
+                  {t.directions}
                 </motion.button>
               </div>
 
-              {/* Nearby Landmarks - Mobile Optimized */}
               <div className="mt-6 md:mt-8 pt-4 md:pt-8 border-t border-[#D4AF37]/20">
                 <p className="text-center text-[#3E2723]/60 text-xs md:text-sm px-2">
-                  {isMobile 
-                    ? '🏨 Hotels • 🚗 Parking • ♿ Accessible'
-                    : '🏨 Nearby Hotels Available • 🚗 Ample Parking • ♿ Wheelchair Accessible'}
+                  {isMobile ? t.nearbyInfoMobile : t.nearbyInfo}
                 </p>
               </div>
             </div>
@@ -2698,7 +2854,7 @@ const opacity = useTransform(
         </div>
       </section>
 
-      {/* CONTACT SECTION - Mobile Optimized */}
+      {/* CONTACT SECTION */}
       <section id="contact" className="py-16 md:py-32 px-3 md:px-4 relative">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -2708,13 +2864,11 @@ const opacity = useTransform(
             className="text-center mb-10 md:mb-16"
           >
             <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-[#3E2723] mb-3 md:mb-4">
-              Connect With Us
+              {t.contactTitle}
             </h2>
             <div className="w-20 md:w-32 h-1 bg-gradient-to-r from-[#D4AF37] via-[#B76E79] to-[#D4AF37] mx-auto mb-4 md:mb-6" />
             <p className="text-[#3E2723]/70 text-sm md:text-base lg:text-lg max-w-2xl mx-auto px-4">
-              {isMobile 
-                ? 'Your presence is our greatest gift'
-                : 'Your presence is our greatest gift. Please reach out with any questions'}
+              {isMobile ? t.contactSubtitleMobile : t.contactSubtitle}
             </p>
           </motion.div>
 
@@ -2725,7 +2879,6 @@ const opacity = useTransform(
             className="bg-white/90 backdrop-blur-sm p-5 md:p-8 lg:p-12 rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl border border-[#D4AF37]/30 mx-2 md:mx-0"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-              {/* Call Card */}
               <motion.div
                 whileHover={!isMobile ? { scale: 1.03, y: -5 } : {}}
                 whileTap={{ scale: 0.98 }}
@@ -2739,12 +2892,11 @@ const opacity = useTransform(
                 >
                   <FaPhone />
                 </motion.div>
-                <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-[#3E2723] text-center mb-1 md:mb-2">Call Us</h3>
-                <p className="text-[#D4AF37] text-base md:text-lg lg:text-xl text-center font-semibold">+91 89785 53778</p>
-                <p className="text-[#3E2723]/60 text-xs md:text-sm text-center mt-1 md:mt-2">Click to connect</p>
+                <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-[#3E2723] text-center mb-1 md:mb-2">{t.callUs}</h3>
+                <p className="text-[#D4AF37] text-base md:text-lg lg:text-xl text-center font-semibold">{t.callNumber}</p>
+                <p className="text-[#3E2723]/60 text-xs md:text-sm text-center mt-1 md:mt-2">{t.callClick}</p>
               </motion.div>
 
-              {/* WhatsApp Card */}
               <motion.div
                 whileHover={!isMobile ? { scale: 1.03, y: -5 } : {}}
                 whileTap={{ scale: 0.98 }}
@@ -2758,13 +2910,12 @@ const opacity = useTransform(
                 >
                   <FaWhatsapp />
                 </motion.div>
-                <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-[#3E2723] text-center mb-1 md:mb-2">WhatsApp</h3>
-                <p className="text-[#25D366] text-base md:text-lg lg:text-xl text-center font-semibold">Send Message</p>
-                <p className="text-[#3E2723]/60 text-xs md:text-sm text-center mt-1 md:mt-2">Get location & updates</p>
+                <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-[#3E2723] text-center mb-1 md:mb-2">{t.whatsapp}</h3>
+                <p className="text-[#25D366] text-base md:text-lg lg:text-xl text-center font-semibold">{t.whatsappMessage}</p>
+                <p className="text-[#3E2723]/60 text-xs md:text-sm text-center mt-1 md:mt-2">{t.whatsappInfo}</p>
               </motion.div>
             </div>
 
-            {/* Additional Contact Info - Mobile Optimized */}
             <motion.div 
               className="mt-6 md:mt-10 text-center"
               initial={{ opacity: 0 }}
@@ -2777,17 +2928,17 @@ const opacity = useTransform(
                 <FaHeart className="text-[#B76E79] animate-pulse delay-200" />
               </div>
               <p className="text-[#3E2723]/80 text-sm md:text-base lg:text-lg mb-1 md:mb-2">
-                We can't wait to celebrate with you!
+                {language === 'english' ? "We can't wait to celebrate with you!" : "మీతో కలిసి వేడుక చేసుకోవడానికి ఎదురుచూస్తున్నాము!"}
               </p>
               <p className="text-[#D4AF37] text-xs md:text-sm">
-                Kindly RSVP by 25th February 2026
+                {t.rsvp}
               </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* BLESSINGS SECTION - Mobile Optimized */}
+      {/* BLESSINGS SECTION */}
       <section className="py-12 md:py-20 px-3 md:px-4 bg-gradient-to-r from-[#D4AF37]/10 to-[#B76E79]/10">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -2796,7 +2947,7 @@ const opacity = useTransform(
             viewport={{ once: true }}
             className="text-center px-2"
           >
-            <h3 className="font-heading text-xl md:text-2xl lg:text-3xl text-[#3E2723] mb-4 md:mb-8">Seeking Your Blessings</h3>
+            <h3 className="font-heading text-xl md:text-2xl lg:text-3xl text-[#3E2723] mb-4 md:mb-8">{t.blessingsTitle}</h3>
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-4 md:mb-8">
               {['🙏', '🌸', '🕉️', '✨', '🌺'].map((symbol, i) => (
                 <motion.span
@@ -2817,17 +2968,14 @@ const opacity = useTransform(
               ))}
             </div>
             <p className="text-sm md:text-base lg:text-lg text-[#3E2723]/70 italic max-w-2xl mx-auto px-4">
-              {isMobile 
-                ? "May your blessings shower upon us as we begin this sacred journey of love."
-                : '"May your blessings shower upon us as we begin this sacred journey of love, trust, and togetherness. Your presence will make our celebration complete."'}
+              {isMobile ? t.blessingsTextMobile : t.blessingsText}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* FOOTER - Mobile Optimized */}
+      {/* FOOTER */}
       <footer className="relative bg-white/90 backdrop-blur-sm py-10 md:py-16 px-3 md:px-4 border-t border-[#D4AF37]/20">
-        {/* Decorative Elements - Simplified for mobile */}
         {!isMobile && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-0 left-0 w-16 md:w-32 h-16 md:h-32 border-t-4 border-l-4 border-[#D4AF37]/20 rounded-tl-3xl" />
@@ -2841,7 +2989,6 @@ const opacity = useTransform(
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            {/* Floral Decoration - Mobile Optimized */}
             <div className="flex justify-center gap-2 md:gap-3 mb-4 md:mb-6">
               {[...Array(isMobile ? 3 : 5)].map((_, i) => (
                 <motion.div
@@ -2862,19 +3009,17 @@ const opacity = useTransform(
             </div>
 
             <h3 className="font-heading text-xl md:text-2xl lg:text-3xl xl:text-5xl text-[#3E2723] mb-2 md:mb-4 px-2">
-              {isMobile ? 'Sai Pavan & Kavya' : 'Sai Pavan Rangu & Kavya'}
+              {isMobile ? t.footerNamesMobile : t.footerNames}
             </h3>
             
             <p className="text-sm md:text-base lg:text-xl text-[#B76E79] mb-3 md:mb-6 font-light">
-              25 Feb 2026 · 9:00 AM - 2:00 PM
+              {t.footerDate}
             </p>
 
             <div className="w-16 md:w-24 h-1 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] mx-auto mb-4 md:mb-8" />
 
             <p className="text-sm md:text-base lg:text-lg text-[#3E2723]/70 italic max-w-2xl mx-auto mb-4 md:mb-8 leading-relaxed px-4">
-              {isMobile 
-                ? "With hearts full of gratitude, we thank the Almighty and our families. Your presence will make our celebration complete."
-                : '"With hearts full of gratitude and souls filled with joy, we thank the Almighty and our beloved families for blessing us with this sacred union. Your presence and blessings will make our celebration truly complete."'}
+              {isMobile ? t.footerTextMobile : t.footerText}
             </p>
 
             <div className="flex justify-center gap-4 md:gap-6 text-xl md:text-2xl mb-4 md:mb-8">
@@ -2902,31 +3047,31 @@ const opacity = useTransform(
             </div>
 
             <p className="text-[10px] md:text-xs text-[#3E2723]/40">
-              © 2026 · Crafted with love for Sai Pavan & Kavya
+              {t.footerCopyright}
             </p>
           </motion.div>
         </div>
       </footer>
 
-      {/* Floating Action Button - Mobile Optimized */}
+      {/* Floating Action Button */}
       {isMobile ? (
-  <motion.button
-    onClick={handleDirections}
-    className="fixed bottom-5 right-5 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
-    initial={{ scale: 0 }}
-    animate={{ scale: 1 }}
-    whileTap={{ scale: 0.9 }}
-  >
-    <FaMapMarkerAlt className="text-xl" />
-  </motion.button>
-) : (
-  <motion.button
-    onClick={() => scrollToSection('home')}
-    className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
-  >
-    <FaStar className="text-xl" />
-  </motion.button>
-)}
+        <motion.button
+          onClick={handleDirections}
+          className="fixed bottom-5 right-5 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <FaMapMarkerAlt className="text-xl" />
+        </motion.button>
+      ) : (
+        <motion.button
+          onClick={() => scrollToSection('home')}
+          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#D4AF37] to-[#B76E79] text-white p-4 rounded-full shadow-xl"
+        >
+          <FaStar className="text-xl" />
+        </motion.button>
+      )}
     </div>
   );
 }
