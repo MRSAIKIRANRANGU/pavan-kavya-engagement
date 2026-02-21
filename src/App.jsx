@@ -2115,7 +2115,7 @@ function App() {
       venueTitle: 'Venue',
       venueSubtitle: 'Where love meets tradition',
       venueName: 'RAMBABU\'S HOME',
-      venueLocation: 'Hyderabad, Telangana',
+      venueLocation: 'Balvanthapuram, Telangana',
       directions: 'Get Live Directions',
       nearbyInfo: '🏨 Nearby Hotels Available • 🚗 Ample Parking • ♿ Wheelchair Accessible',
       nearbyInfoMobile: '🏨 Hotels • 🚗 Parking • ♿ Accessible',
