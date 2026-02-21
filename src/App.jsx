@@ -2190,7 +2190,7 @@ function App() {
       venueTitle: 'స్థలం',
       venueSubtitle: 'ప్రేమ సంగమం',
       venueName: 'రాంబాబు గారి నివాసం',
-      venueLocation: 'హైదరాబాద్, తెలంగాణ',
+      venueLocation: 'బల్వంతపురం, తెలంగాణ',
       directions: 'దారి సూచనలు పొందండి',
       nearbyInfo: '🏨 సమీప హోటళ్ళు • 🚗 పార్కింగ్ సౌకర్యం • ♿ వీల్ చైర్ సౌకర్యం',
       nearbyInfoMobile: '🏨 హోటళ్ళు • 🚗 పార్కింగ్ • ♿ సౌకర్యం',
